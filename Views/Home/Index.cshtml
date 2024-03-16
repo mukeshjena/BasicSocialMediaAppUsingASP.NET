@@ -1,0 +1,62 @@
+﻿@using System.Data
+@model DataTable
+
+@{
+    ViewBag.Title = "Home";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h2 class="text-center mb-4">Welcome to Your Social Media App</h2>
+            <div class="text-end mb-3">
+                <a href="@Url.Action("Create", "Post", new { userId = ViewBag.UserId })" class="btn btn-primary">Create Post</a>
+                <a href="@Url.Action("Index", "UserLogin")" class="btn btn-primary">Logout</a>
+                <a href="@Url.Action("Index", "UserProfile", new { userId = ViewBag.UserId })" class="btn btn-primary">View Profile</a>
+            </div>
+            @if (Model.Rows.Count > 0)
+            {
+                foreach (DataRow row in Model.Rows)
+                {
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">@row["username"]</h5>
+                            <p class="card-text">@row["post_content"]</p>
+                            <p class="card-text"><small class="text-muted">Posted on: @Convert.ToDateTime(row["post_time"]).ToString("MMM dd, yyyy h:mm tt")</small></p>
+                            <button class="btn btn-danger" onclick="confirmDelete('@row["post_id"]')">Delete</button>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="alert alert-info" role="alert">
+                    No posts available.
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function confirmDelete(postId) {
+            if (confirm("Are you sure you want to delete this post?")) {
+                $.ajax({
+                    url: '@Url.Action("Delete", "Post")',
+                    type: 'POST',
+                    data: { postId: postId },
+                    success: function (result) {
+                        // Refresh the page after deletion
+                        location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        }
+    </script>
+}
