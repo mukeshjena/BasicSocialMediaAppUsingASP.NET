@@ -117,16 +117,18 @@ public class DataAccessLayer
         return dataTable;
     }
 
-    public int DeletePost(int postId)
+    public void DeletePostFromHomePage(int postId, int userId)
     {
         using (SqlConnection connection = new SqlConnection(connectionString))
         {
             connection.Open();
-            SqlCommand command = new SqlCommand("DeletePost", connection);
+            SqlCommand command = new SqlCommand("DeletePostFromHomePage", connection);
             command.CommandType = CommandType.StoredProcedure;
             command.Parameters.AddWithValue("@post_id", postId);
-            return command.ExecuteNonQuery();
+            command.Parameters.AddWithValue("@user_id", userId);
+            command.ExecuteNonQuery();
         }
     }
+
 
 }

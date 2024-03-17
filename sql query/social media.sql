@@ -95,3 +95,14 @@ BEGIN
 END;
 
 exec DeletePost 6;
+
+
+CREATE PROCEDURE DeletePostFromHomePage
+    @post_id INT,
+    @user_id INT
+AS
+BEGIN
+    DELETE FROM Post
+    WHERE post_id = @post_id
+    AND user_id = @user_id;
+END;

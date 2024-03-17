@@ -40,10 +40,10 @@ namespace SocialMedia.Controllers
 
         // POST: Post/Delete
         [HttpPost]
-        public ActionResult Delete(int postId)
+        public ActionResult Delete(int postId, int userId)
         {
-            // Call the stored procedure to delete the post
-            dal.DeletePost(postId);
+            // Ensure userId matches the userId of the post before allowing deletion
+            dal.DeletePostFromHomePage(postId, userId);
 
             // Redirect to the homepage
             return RedirectToAction("Index", "Home");

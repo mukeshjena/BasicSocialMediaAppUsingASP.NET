@@ -3,7 +3,13 @@
 
 @{
     ViewBag.Title = "Home";
+    int userId = ViewBag.UserId ?? 0; // Get the userId from ViewBag or default to 0
 }
+
+<script>
+    // Store the user ID in session storage
+    sessionStorage.setItem('userId', @userId);
+</script>
 
 <div class="container mt-5">
     <div class="row">
@@ -18,12 +24,18 @@
             {
                 foreach (DataRow row in Model.Rows)
                 {
-                    <div class="card mb-3">
+                    int postOwnerId = Convert.ToInt32(row["user_id"]);
+                    bool isCurrentUserPostOwner = postOwnerId == userId;
+
+                    <div class="card mb-3" id="post_@row["post_id"]">
                         <div class="card-body">
                             <h5 class="card-title">@row["username"]</h5>
                             <p class="card-text">@row["post_content"]</p>
                             <p class="card-text"><small class="text-muted">Posted on: @Convert.ToDateTime(row["post_time"]).ToString("MMM dd, yyyy h:mm tt")</small></p>
-                            <button class="btn btn-danger" onclick="confirmDelete('@row["post_id"]')">Delete</button>
+                            @if (isCurrentUserPostOwner)
+                            {
+                                <button class="btn btn-danger" onclick="confirmDelete('@row["post_id"]')">Delete</button>
+                            }
                         </div>
                     </div>
                 }
@@ -46,10 +58,10 @@
                 $.ajax({
                     url: '@Url.Action("Delete", "Post")',
                     type: 'POST',
-                    data: { postId: postId },
+                    data: { postId: postId, userId: @userId },
                     success: function (result) {
-                        // Refresh the page after deletion
-                        location.reload();
+                        // Remove the post's HTML element from the page
+                        $('#post_' + postId).remove();
                     },
                     error: function (xhr, status, error) {
                         // Handle error
