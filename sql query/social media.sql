@@ -63,7 +63,7 @@ exec CreatePost 1,'this is my first post';
 CREATE PROCEDURE GetHomePagePosts
 AS
 BEGIN
-    SELECT p.post_id, u.username, p.post_content, p.post_time
+    SELECT p.post_id, u.username, u.user_id, p.post_content, p.post_time
     FROM Post p
     INNER JOIN [dbo].[User] u ON p.user_id = u.user_id
     ORDER BY p.post_time DESC;
