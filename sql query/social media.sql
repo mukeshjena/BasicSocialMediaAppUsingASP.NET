@@ -58,7 +58,7 @@ BEGIN
     VALUES (@user_id, @post_content, GETDATE());
 END;
 
-exec CreatePost 6,'this is my first post, me millan gandu achhi';
+exec CreatePost 1,'this is my first post';
 -- Stored procedure to get posts for the home screen
 CREATE PROCEDURE GetHomePagePosts
 AS
