@@ -1,134 +1,132 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
-using System.Data;
 using System.Data.SqlClient;
-using SocialMedia.Models;
-
+using System.Data;
+using System.Linq;
+using System.Web;
+using SocialMediaWebApp.Models;
+using System.Web.Helpers;
 public class DataAccessLayer
-{
-    string connectionString = ConfigurationManager.ConnectionStrings["dbcs"].ConnectionString;
-
-    public int RegisterUser(User user)
     {
-        using (SqlConnection connection = new SqlConnection(connectionString))
+        string connectionString = ConfigurationManager.ConnectionStrings["dbcs"].ConnectionString;
+        public int RegisterUser(Users u)
         {
-            connection.Open();
-            SqlCommand command = new SqlCommand("RegisterUser", connection);
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("@username", user.Username);
-            command.Parameters.AddWithValue("@password", user.Password);
-            command.Parameters.AddWithValue("@email", user.Email);
-            command.Parameters.AddWithValue("@full_name", user.FullName);
-            return command.ExecuteNonQuery();
-        }
-    }
-
-    public int LoginUser(User user)
-    {
-        int userId = 0;
-        using (SqlConnection connection = new SqlConnection(connectionString))
-        {
-            connection.Open();
-            SqlCommand command = new SqlCommand("LoginUser", connection);
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("@username", user.Username);
-            command.Parameters.AddWithValue("@password", user.Password);
-            var result = command.ExecuteScalar();
-            if (result != null && result != DBNull.Value)
+            using(SqlConnection con = new SqlConnection(connectionString))
             {
-                userId = Convert.ToInt32(result);
+                con.Open();
+                SqlCommand cmd = new SqlCommand("RegisterUser",con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@username",u.Username);
+                cmd.Parameters.AddWithValue("password", u.Password);
+                cmd.Parameters.AddWithValue("@email", u.Email);
+                cmd.Parameters.AddWithValue("@full_name", u.FullName);
+                int i = cmd.ExecuteNonQuery();
+                return i;
             }
         }
-        return userId;
-    }
 
-
-
-    public User GetUserById(int userId)
-    {
-        using (SqlConnection connection = new SqlConnection(connectionString))
+        public int LoginUser(Users u)
         {
-            connection.Open();
-            SqlCommand command = new SqlCommand("SELECT * FROM [dbo].[User] WHERE user_id = @userId", connection);
-            command.Parameters.AddWithValue("@userId", userId);
-            SqlDataReader reader = command.ExecuteReader();
-            if (reader.Read())
+            int userId = 0;
+            using (SqlConnection con = new SqlConnection(connectionString))
             {
-                // User found, create a User object and return it
-                return new User
+                con.Open();
+                SqlCommand cmd = new SqlCommand("LoginUser", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@username", u.Username);
+                cmd.Parameters.AddWithValue("@password", u.Password);
+                var result = cmd.ExecuteScalar();
+                if(result != null && result != DBNull.Value)
                 {
-                    UserId = (int)reader["user_id"],
-                    Username = (string)reader["username"],
-                    Password = (string)reader["password"],
-                    Email = (string)reader["email"],
-                    FullName = (string)reader["full_name"],
-                    RegistrationDate = (DateTime)reader["registration_date"]
-                };
+                    userId = Convert.ToInt32(result);
+                }
             }
-            else
+            return userId;
+        }
+
+        public List<Users> GetUsersById(int userId)
+        {
+            List<Users> userList = new List<Users>();
+
+            using (SqlConnection con = new SqlConnection(connectionString))
             {
-                // User not found, return null
-                return null;
+                con.Open();
+                SqlCommand cmd = new SqlCommand("GetUserByID", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@userId", userId);
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Users u = new Users();
+                    u.UserId = (int)reader["user_id"];
+                    u.Username = (string)reader["username"];
+                    u.Password = (string)reader["password"];
+                    u.Email = (string)reader["email"];
+                    u.FullName = (string)reader["full_name"];
+                    u.RegistrationDate = (DateTime)reader["registration_date"];
+
+                    userList.Add(u);
+                }
+            }
+
+            return userList;
+        }
+
+        public int CreatePost(Post p)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+                SqlCommand command = new SqlCommand("CreatePost", con);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@user_id", p.UserId);
+                command.Parameters.AddWithValue("@post_content", p.PostContent);
+                int i = command.ExecuteNonQuery();
+                return i;
+            }
+        }
+
+        public DataTable GetHomePagePosts()
+        {
+            DataTable dataTable = new DataTable();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("GetHomePagePosts", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.Fill(dataTable);
+            }
+            return dataTable;
+        }
+
+        public DataTable GetUserProfile(int userId)
+        {
+            DataTable dataTable = new DataTable();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("GetUserProfile", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@user_id", userId);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.Fill(dataTable);
+            }
+            return dataTable;
+        }
+
+        public void DeletePostFromHomePage(int postId, int userId)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("DeletePostFromHomePage", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@post_id", postId);
+                cmd.Parameters.AddWithValue("@user_id", userId);
+                cmd.ExecuteNonQuery();
             }
         }
     }
-
-
-
-    public int CreatePost(Post post)
-    {
-        using (SqlConnection connection = new SqlConnection(connectionString))
-        {
-            connection.Open();
-            SqlCommand command = new SqlCommand("CreatePost", connection);
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("@user_id", post.UserId);
-            command.Parameters.AddWithValue("@post_content", post.PostContent);
-            return command.ExecuteNonQuery();
-        }
-    }
-
-    public DataTable GetHomePagePosts()
-    {
-        DataTable dataTable = new DataTable();
-        using (SqlConnection connection = new SqlConnection(connectionString))
-        {
-            connection.Open();
-            SqlCommand command = new SqlCommand("GetHomePagePosts", connection);
-            command.CommandType = CommandType.StoredProcedure;
-            SqlDataAdapter adapter = new SqlDataAdapter(command);
-            adapter.Fill(dataTable);
-        }
-        return dataTable;
-    }
-
-    public DataTable GetUserProfile(int userId)
-    {
-        DataTable dataTable = new DataTable();
-        using (SqlConnection connection = new SqlConnection(connectionString))
-        {
-            connection.Open();
-            SqlCommand command = new SqlCommand("GetUserProfile", connection);
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("@user_id", userId);
-            SqlDataAdapter adapter = new SqlDataAdapter(command);
-            adapter.Fill(dataTable);
-        }
-        return dataTable;
-    }
-
-    public void DeletePostFromHomePage(int postId, int userId)
-    {
-        using (SqlConnection connection = new SqlConnection(connectionString))
-        {
-            connection.Open();
-            SqlCommand command = new SqlCommand("DeletePostFromHomePage", connection);
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("@post_id", postId);
-            command.Parameters.AddWithValue("@user_id", userId);
-            command.ExecuteNonQuery();
-        }
-    }
-
-
-}

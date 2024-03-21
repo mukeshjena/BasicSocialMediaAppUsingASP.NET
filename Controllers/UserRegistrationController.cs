@@ -3,29 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using SocialMedia.Models;
+using SocialMediaWebApp.Models;
 
-namespace SocialMedia.Controllers
+namespace SocialMediaWebApp.Controllers
 {
     public class UserRegistrationController : Controller
     {
         DataAccessLayer dal = new DataAccessLayer();
 
         // GET: UserRegistration
-        public ActionResult Index()
+        public ActionResult Register()
         {
             return View();
         }
 
         [HttpPost]
-        public ActionResult Register(User user)
+        public ActionResult Register(Users u)
         {
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
-                dal.RegisterUser(user);
-                return RedirectToAction("Index", "UserLogin");
+                dal.RegisterUser(u);
+                return RedirectToAction("Index","UserLogin");
             }
-            return View("Index", user);
+            return View("Index",u);
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿@model SocialMedia.Models.Post
+﻿@model SocialMediaWebApp.Models.Post
 
 @{
-    ViewBag.Title = "Create Post";
+    ViewBag.Title = "Create";
 }
 
 <div class="container mt-5">
@@ -12,7 +12,6 @@
                 <div class="card-body">
                     @using (Html.BeginForm("Create", "Post", new { userId = ViewBag.UserId }, FormMethod.Post))
                     {
-                        @Html.AntiForgeryToken()
 
                         <div class="form-group">
                             @Html.LabelFor(model => model.PostContent, htmlAttributes: new { @class = "control-label" })
@@ -41,3 +40,4 @@
         </div>
     </div>
 </div>
+

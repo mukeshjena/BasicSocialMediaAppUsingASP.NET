@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 
-namespace SocialMedia
+namespace SocialMediaWebApp
 {
     public class FilterConfig
     {

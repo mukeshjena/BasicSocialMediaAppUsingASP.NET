@@ -4,17 +4,17 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace SocialMedia.Controllers
+namespace SocialMediaWebApp.Controllers
 {
     public class UserProfileController : Controller
     {
         DataAccessLayer dal = new DataAccessLayer();
 
         // GET: UserProfile
-        public ActionResult Index(int userId)
+        public ActionResult Profile(int userId)
         {
-            var userProfileData = dal.GetUserProfile(userId);
-            return View(userProfileData);
+            var userProfile = dal.GetUserProfile(userId);
+            return View(userProfile);
         }
     }
 }

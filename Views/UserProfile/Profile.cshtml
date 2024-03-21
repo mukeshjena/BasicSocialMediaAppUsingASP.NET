@@ -1,0 +1,49 @@
+﻿@using System.Data
+@model DataTable
+@{
+    ViewBag.Title = "Profile";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">User Profile</h5>
+                    @if (Model != null && Model.Rows.Count > 0)
+                    {
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Username</th>
+                                <td>@Model.Rows[0]["username"]</td>
+                            </tr>
+                            <tr>
+                                <th>Full Name</th>
+                                <td>@Model.Rows[0]["full_name"]</td>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td>@Model.Rows[0]["email"]</td>
+                            </tr>
+                        </table>
+                        <h5 class="mt-3">Posts</h5>
+                        <ul class="list-group">
+                            @foreach (DataRow row in Model.Rows)
+                            {
+                                <li class="list-group-item">
+                                    <span>@row["post_content"]</span>
+                                    <small class="text-muted">Posted on @(row["post_time"] != DBNull.Value ? Convert.ToDateTime(row["post_time"]).ToString("MMMM dd, yyyy") : "N/A")</small>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p>User profile not found.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

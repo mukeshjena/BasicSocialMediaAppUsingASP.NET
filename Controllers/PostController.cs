@@ -1,7 +1,11 @@
-﻿using System.Web.Mvc;
-using SocialMedia.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using SocialMediaWebApp.Models;
 
-namespace SocialMedia.Controllers
+namespace SocialMediaWebApp.Controllers
 {
     public class PostController : Controller
     {
@@ -10,44 +14,32 @@ namespace SocialMedia.Controllers
         // GET: Post/Create
         public ActionResult Create(int userId)
         {
-            // Pass userId to the view
-            ViewBag.UserId = userId;
+            ViewBag.UserId = userId;//retrive from homepage
 
             return View();
         }
 
-        // POST: Post/Create
         [HttpPost]
-        public ActionResult Create(Post post, int userId)
+        public ActionResult Create(Post p, int userId)
         {
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
-                // Set user ID for the post
-                post.UserId = userId;
+                p.UserId = userId;
 
-                // Create post
-                dal.CreatePost(post);
+                dal.CreatePost(p);
 
-                // Store userId in TempData
-                TempData["UserId"] = userId;
+                Session["UserId"] = userId;
 
-                // Redirect to homepage
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index","Home");
             }
-            // If model state is not valid, return the view with errors
-            return View(post);
+            return View(p);
         }
 
-        // POST: Post/Delete
         [HttpPost]
         public ActionResult Delete(int postId, int userId)
         {
-            // Ensure userId matches the userId of the post before allowing deletion
             dal.DeletePostFromHomePage(postId, userId);
-
-            // Redirect to the homepage
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index","Home");
         }
-
     }
 }

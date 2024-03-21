@@ -1,0 +1,77 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>404 - Page not found</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        /* Custom styles for this template */
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .notfound {
+            display: flex;
+            align-items: center;
+        }
+
+        .notfound-404 {
+            margin-right: 20px;
+        }
+
+            .notfound-404 img {
+                max-width: 100%;
+                height: auto;
+            }
+
+        .notfound h1 {
+            font-size: 86px;
+            color: #343a40;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .notfound h2 {
+            font-size: 26px;
+            color: #343a40;
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+
+        .notfound p {
+            font-size: 14px;
+            color: #6c757d;
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="notfound">
+            <div class="notfound-404">
+                <img src="~/assets/img/emoji.png" alt="404 Error Image">
+            </div>
+            <div>
+                <h1>404</h1>
+                <h2>Oops! Page Not Found</h2>
+                <p>Sorry, but the page you are looking for does not exist, has been removed, or is temporarily unavailable.</p>
+                <a href="@Url.Action("Login","UserLogin")" class="btn btn-primary">Back to Homepage</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

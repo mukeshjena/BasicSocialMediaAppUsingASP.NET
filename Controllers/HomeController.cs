@@ -1,7 +1,10 @@
-﻿using System.Web.Mvc;
-using SocialMedia.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
 
-namespace SocialMedia.Controllers
+namespace SocialMediaWebApp.Controllers
 {
     public class HomeController : Controller
     {
@@ -10,15 +13,10 @@ namespace SocialMedia.Controllers
         // GET: Home
         public ActionResult Index()
         {
-            // Retrieve user ID from TempData
-            int userId = TempData["UserId"] != null ? (int)TempData["UserId"] : 0;
-
-            // Now fetch the home page posts
+            int userId = Session["UserId"] != null ? (int)Session["UserId"] : 0;//retrive the userid from login
             var homePagePosts = dal.GetHomePagePosts();
 
-            // Pass userId to the view
-            ViewBag.UserId = userId;
-
+            ViewBag.UserId = userId;//store userid in viewbag
             return View(homePagePosts);
         }
     }

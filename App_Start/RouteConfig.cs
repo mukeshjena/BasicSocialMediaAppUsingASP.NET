@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace SocialMedia
+namespace SocialMediaWebApp
 {
     public class RouteConfig
     {
@@ -16,7 +16,7 @@ namespace SocialMedia
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "UserLogin", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "UserLogin", action = "Login", id = UrlParameter.Optional }
             );
         }
     }
