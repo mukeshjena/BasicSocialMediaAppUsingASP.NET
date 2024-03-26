@@ -1,0 +1,26 @@
+﻿@model List<PracticeEF.Models.NameModel>
+@{
+    ViewBag.Title = "Names";
+}
+
+<h2>Names</h2>
+
+<table class="table table-bordered table-hover table-responsive">
+    <tr class="table-dark">
+        <td>Id</td>
+        <td>Full Name</td>
+        <td>Actions</td>
+    </tr>
+    @foreach(var i in Model)
+            {
+                <tr>
+                    <td>@i.Id</td>
+                    <td>@i.Name</td>
+                    <td>
+                        <a href="@Url.Action("CreateOrEdit","Name", new {id = i.Id})" class="btn btn-warning">Edit</a>
+                        <a href="@Url.Action("Delete", "Name", new {id = i.Id})" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+</table>
+

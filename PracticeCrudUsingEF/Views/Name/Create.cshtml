@@ -1,0 +1,18 @@
+﻿@model PracticeEF.Models.NameModel
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name)
+        @Html.TextBoxFor(model => model.Name, new { @class = "form-control",@*, required = "required"*@})
+        @Html.ValidationMessageFor(model => model.Name,"", new {@class = "text-danger"})
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Create</button>
+}
