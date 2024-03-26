@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace SocialMedia.Models
+namespace SocialMediaWebApp.Models
 {
     public class Login
     {

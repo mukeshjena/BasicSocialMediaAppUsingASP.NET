@@ -45,34 +45,6 @@ public class DataAccessLayer
             return userId;
         }
 
-        public List<Users> GetUsersById(int userId)
-        {
-            List<Users> userList = new List<Users>();
-
-            using (SqlConnection con = new SqlConnection(connectionString))
-            {
-                con.Open();
-                SqlCommand cmd = new SqlCommand("GetUserByID", con);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@userId", userId);
-                SqlDataReader reader = cmd.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    Users u = new Users();
-                    u.UserId = (int)reader["user_id"];
-                    u.Username = (string)reader["username"];
-                    u.Password = (string)reader["password"];
-                    u.Email = (string)reader["email"];
-                    u.FullName = (string)reader["full_name"];
-                    u.RegistrationDate = (DateTime)reader["registration_date"];
-
-                    userList.Add(u);
-                }
-            }
-
-            return userList;
-        }
 
         public int CreatePost(Post p)
         {

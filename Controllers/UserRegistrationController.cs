@@ -23,9 +23,9 @@ namespace SocialMediaWebApp.Controllers
             if(ModelState.IsValid)
             {
                 dal.RegisterUser(u);
-                return RedirectToAction("Index","UserLogin");
+                return RedirectToAction("Login","UserLogin");
             }
-            return View("Index",u);
+            return View();
         }
     }
 }

@@ -9,11 +9,11 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">Create Post</div>
-                <div class="card-body">
+                <div class="card-body text-center">
                     @using (Html.BeginForm("Create", "Post", new { userId = ViewBag.UserId }, FormMethod.Post))
                     {
 
-                        <div class="form-group">
+                        <div class="form-group d-flex flex-column align-items-center justify-content-center">
                             @Html.LabelFor(model => model.PostContent, htmlAttributes: new { @class = "control-label" })
                             @Html.TextAreaFor(model => model.PostContent, new { @class = "form-control", rows = "5" })
                             @Html.ValidationMessageFor(model => model.PostContent, "", new { @class = "text-danger" })
@@ -21,18 +21,6 @@
 
                         <div class="form-group">
                             <input type="submit" value="Create" class="btn btn-primary" />
-                        </div>
-                    }
-                    @if (!ViewData.ModelState.IsValid)
-                    {
-                        <div class="alert alert-danger">
-                            @Html.ValidationSummary(true)
-                        </div>
-                    }
-                    @if (ViewBag.Error != null)
-                    {
-                        <div class="alert alert-danger">
-                            @ViewBag.Error
                         </div>
                     }
                 </div>

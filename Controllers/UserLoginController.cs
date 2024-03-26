@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 using SocialMediaWebApp.Models;
+using Login = SocialMediaWebApp.Models.Login;
 
 namespace SocialMediaWebApp.Controllers
 {
@@ -17,30 +19,24 @@ namespace SocialMediaWebApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Login(Users u)
+        public ActionResult Login(Login l)
         {
             if(ModelState.IsValid)
             {
-                try
+                Users user = new Users
                 {
-                    int userId = dal.LoginUser(u);
+                    Username = l.Username,
+                    Password = l.Password
+                };
+                int userId = dal.LoginUser(user);
                     if(userId != 0)
                     {
                         Session["UserId"] = userId;//store id for future use in homepage
 
                         return RedirectToAction("Index","Home");
                     }
-                    else
-                    {
-                        ModelState.AddModelError("", "Invalid username or password");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", "An error occurred while processing your request. Please try again later.");
-                }
             }
-            return View("Login",u);
+            return View("Login",l);
         }
     }
 }
