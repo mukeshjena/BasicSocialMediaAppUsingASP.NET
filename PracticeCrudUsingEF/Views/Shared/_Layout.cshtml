@@ -30,6 +30,12 @@
                             </li>
                         </ul>
                     }
+                    @if(ViewBag.List == "list")
+                    {
+                        <li class="nav-item">
+                            @Html.ActionLink("ExportToExcel", "ExportToExcel", "Name", null, new { @class = "nav-link" })
+                        </li>
+                    }
                 </ul>
             </div>
         </div>

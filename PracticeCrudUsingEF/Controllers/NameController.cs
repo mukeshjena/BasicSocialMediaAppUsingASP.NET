@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using PracticeEF.DbCtx;
 using PracticeEF.Models;
 using System.Data.Entity;
+using System.ComponentModel;
+using OfficeOpenXml;
 
 namespace PracticeEF.Controllers
 {
@@ -26,15 +28,16 @@ namespace PracticeEF.Controllers
                     Name = item.Name,
                 });
             }
+            ViewBag.List = "list";
             return View(list);
         }
 
         public ActionResult Delete(int id)
         {
-            MukeshDb db =new MukeshDb();
+            MukeshDb db = new MukeshDb();
 
             var res = db.Friends.Where(m => m.Id == id).FirstOrDefault();
-            if(res != null)
+            if (res != null)
             {
                 db.Friends.Remove(res);
                 db.SaveChanges();
@@ -141,13 +144,13 @@ namespace PracticeEF.Controllers
             MukeshDb db = new MukeshDb();
             var res = db.Friends.Where(f => f.Id == id).FirstOrDefault();
             NameModel m = new NameModel();
-            if(res != null)
+            if (res != null)
             {
                 m.Id = res.Id;
                 m.Name = res.Name;
             }
             ViewBag.Name = "Edit";
-            return View("Create",m);
+            return View("Create", m);
         }
 
         public ActionResult Create()
@@ -162,7 +165,7 @@ namespace PracticeEF.Controllers
             Friend f = new Friend();
             f.Id = m.Id;
             f.Name = m.Name;
-            if(m.Id == 0)
+            if (m.Id == 0)
             {
                 db.Friends.Add(f);
                 db.SaveChanges();
@@ -175,6 +178,34 @@ namespace PracticeEF.Controllers
             return RedirectToAction("Names");
         }
 
-        
+        public ActionResult ExportToExcel()
+        {
+            MukeshDb db = new MukeshDb();
+            var data = db.Friends.ToList();
+
+            ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial; // Set license context
+
+            using (ExcelPackage package = new ExcelPackage())
+            {
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Names");
+
+                // Add column headers
+                worksheet.Cells[1, 1].Value = "Id";
+                worksheet.Cells[1, 2].Value = "Full Name";
+
+                // Add data
+                int row = 2;
+                foreach (var item in data)
+                {
+                    worksheet.Cells[row, 1].Value = item.Id;
+                    worksheet.Cells[row, 2].Value = item.Name;
+                    row++;
+                }
+
+                // Save the file
+                byte[] fileContents = package.GetAsByteArray();
+                return File(fileContents, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Names.xlsx");
+            }
+        }
     }
 }

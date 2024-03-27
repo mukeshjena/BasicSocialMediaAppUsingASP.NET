@@ -1,15 +1,7 @@
 ﻿@model PracticeEF.Models.NameModel
 
 @{
-    ViewBag.Title = "Create";
-}
-@if (ViewBag.Name == "Edit")
-{
-    <h2>Edit</h2>
-}
-else
-{
-    <h2>Create</h2>
+    ViewBag.Title = ViewBag.Name == "Edit" ? "Edit" : "Create";
 }
 
 
@@ -23,15 +15,9 @@ else
             @class = "form-control",@*, required = "required"*@})
         @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
     </div>
-    <br />
-    if (ViewBag.Name == "Edit")
-    {
-        <button type="submit" class="btn btn-primary">Edit</button>
 
-    }
-    else
-    {
-        <button type="submit" class="btn btn-primary">Create</button>
-    }
+    <br />
+
+    <button type="submit" class="btn btn-primary">@ViewBag.Title</button>
 
 }
