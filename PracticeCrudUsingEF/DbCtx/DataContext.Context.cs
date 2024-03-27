@@ -26,5 +26,6 @@ namespace PracticeEF.DbCtx
         }
     
         public virtual DbSet<Friend> Friends { get; set; }
+        public virtual DbSet<User> Users { get; set; }
     }
 }

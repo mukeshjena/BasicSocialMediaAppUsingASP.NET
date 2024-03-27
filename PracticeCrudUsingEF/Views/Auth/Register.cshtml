@@ -1,0 +1,80 @@
+﻿@model PracticeEF.Models.UserModel
+@{
+    ViewBag.Title = "Register";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card mt-5">
+                <div class="card-header">
+                    <h2 class="card-title">Register</h2>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("Register", "Auth", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-group">
+                            <label for="Username">Username:</label>
+                            @Html.TextBoxFor(m => m.username, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.username, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Password">Password:</label>
+                            @Html.PasswordFor(m => m.password, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.password, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ConfirmPassword">Confirm Password:</label>
+                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Fullname">Full Name:</label>
+                            @Html.TextBoxFor(m => m.fullname, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.fullname, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Email">Email:</label>
+                            @Html.TextBoxFor(m => m.email, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.email, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+                            <label for="DateOfBirth">Date of Birth:</label>
+                            @Html.TextBoxFor(m => m.dateOfBirth, new { @class = "form-control", type = "date" })
+                            @Html.ValidationMessageFor(m => m.dateOfBirth, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+                            <label>Gender:</label>
+                            <div>
+                                <input type="checkbox" id="male" name="Gender" value="Male">
+                                <label for="male">Male</label>
+                                <input type="checkbox" id="female" name="Gender" value="Female">
+                                <label for="female">Female</label>
+                            </div>
+                            @Html.ValidationMessageFor(m => m.gender, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+                            <label for="City">City:</label>
+                            @Html.DropDownListFor(m => m.city, (SelectList)ViewBag.Cities, "-- Select City --")
+                            @Html.ValidationMessageFor(m => m.city, "", new { @class = "text-danger" })
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    }
+                </div>
+                <div class="card-footer text-muted">
+                    <p class="text-center">Already have an account? <a href="@Url.Action("Login", "Auth")">Login here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

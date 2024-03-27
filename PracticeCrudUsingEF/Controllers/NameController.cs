@@ -5,9 +5,11 @@ using System.Web;
 using System.Web.Mvc;
 using PracticeEF.DbCtx;
 using PracticeEF.Models;
+using System.Data.Entity;
 
 namespace PracticeEF.Controllers
 {
+    [Authorize]
     public class NameController : Controller
     {
         // GET: Name
@@ -90,7 +92,7 @@ namespace PracticeEF.Controllers
             return RedirectToAction("Names");
         }*/
 
-        public ActionResult CreateOrEdit(int? id)
+        /*public ActionResult CreateOrEdit(int? id)
         {
             var m = new NameModel();
             if(id.HasValue)
@@ -132,6 +134,47 @@ namespace PracticeEF.Controllers
                 return RedirectToAction("Names");
             }
             return View(m);
+        }*/
+
+        public ActionResult Edit(int id)
+        {
+            MukeshDb db = new MukeshDb();
+            var res = db.Friends.Where(f => f.Id == id).FirstOrDefault();
+            NameModel m = new NameModel();
+            if(res != null)
+            {
+                m.Id = res.Id;
+                m.Name = res.Name;
+            }
+            ViewBag.Name = "Edit";
+            return View("Create",m);
         }
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Create(NameModel m)
+        {
+            MukeshDb db = new MukeshDb();
+            Friend f = new Friend();
+            f.Id = m.Id;
+            f.Name = m.Name;
+            if(m.Id == 0)
+            {
+                db.Friends.Add(f);
+                db.SaveChanges();
+            }
+            else
+            {
+                db.Entry(f).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            return RedirectToAction("Names");
+        }
+
+        
     }
 }

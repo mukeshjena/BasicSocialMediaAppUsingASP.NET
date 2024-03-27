@@ -17,7 +17,7 @@
                     <td>@i.Id</td>
                     <td>@i.Name</td>
                     <td>
-                        <a href="@Url.Action("CreateOrEdit","Name", new {id = i.Id})" class="btn btn-warning">Edit</a>
+                        <a href="@Url.Action("Edit","Name", new {id = i.Id})" class="btn btn-warning">Edit</a>
                         <a href="@Url.Action("Delete", "Name", new {id = i.Id})" class="btn btn-danger">Delete</a>
                     </td>
                 </tr>
